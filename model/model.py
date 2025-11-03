@@ -37,6 +37,38 @@ class Autonoleggio:
         """
 
         # TODO
+        # connessione con database
+        conn = get_connection()
+        # se connessione fallita
+        if conn is None:
+            return None
+
+        cursor = conn.cursor()
+        query = "SELECT * FROM automobile"
+        # eseguo la query sul database
+        cursor.execute(query)
+        # mi restituisce i risultati presi dal database in una lista di tuple
+        risultati = cursor.fetchall()
+
+        automobili = []
+        for row in risultati:
+            auto = Automobile(
+                codice=row[0],
+                marca=row[1],
+                modello=row[2],
+                anno=row[3],
+                posti=row[4],
+                disponibile=row[5]
+            )
+            automobili.append(auto)
+
+        cursor.close()
+        conn.close()
+
+        return automobili if automobili else None
+
+
+
 
     def cerca_automobili_per_modello(self, modello) -> list[Automobile] | None:
         """
@@ -45,3 +77,32 @@ class Autonoleggio:
             :return: una lista con tutte le automobili di marca e modello indicato oppure None
         """
         # TODO
+        # connessione con database
+        conn = get_connection()
+        # se connessione fallita
+        if conn is None:
+            return None
+
+        # un oggetto cursore che mi permette di recuperare risultati della query
+        cursor = conn.cursor()
+        query = f"SELECT * FROM automobile WHERE modello = '{modello}'"
+        # eseguo la query sul database
+        cursor.execute(query)
+        # mi restituisce i risultati presi dal database in una lista di tuple
+        risultati = cursor.fetchall()
+
+        automobili = []
+        for row in risultati:
+            auto = Automobile(
+                codice=row[0],
+                marca=row[1],
+                modello=row[2],
+                anno=row[3],
+                posti=row[4],
+                disponibile=row[5]
+            )
+            automobili.append(auto)
+
+        cursor.close()
+        conn.close()
+        return automobili if automobili else None
