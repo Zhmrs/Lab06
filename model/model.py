@@ -85,9 +85,11 @@ class Autonoleggio:
 
         # un oggetto cursore che mi permette di recuperare risultati della query
         cursor = conn.cursor()
-        query = f"SELECT * FROM automobile WHERE modello = '{modello}'"
+        query = """ SELECT * 
+                    FROM automobile 
+                    WHERE modello = %s """
         # eseguo la query sul database
-        cursor.execute(query)
+        cursor.execute(query,(modello,))
         # mi restituisce i risultati presi dal database in una lista di tuple
         risultati = cursor.fetchall()
 
